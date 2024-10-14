@@ -1,26 +1,44 @@
 require('dotenv').config();
 const express = require('express');
 const { Client, LocalAuth, Poll } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+const qrcode = require('qrcode');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const client = new Client({
-    authStrategy: new LocalAuth()
-});
+const client = new Client();
+// const client = new Client({
+//     authStrategy: new LocalAuth()
+// });
 
 client.once('ready', () => {
     console.log('Client is ready!');
 });
 
-client.on('qr', (qr) => {
-    // qrcode.generate(qr, { small: true });
+// client.on('qr', (qr) => {
+//     // qrcode.generate(qr, { small: true });
 
+//     qrcode.toDataURL(qr, (err, url) => {
+//         if (err) {
+//             console.error('Error generating QR code:', err);
+//             return;
+//         }
+//         console.log('QR Code URL:', url);
+//     });
+// });
+
+
+
+let qrCodeUrl = null;
+
+client.on('qr', (qr) => {
+    console.log(qr)
     qrcode.toDataURL(qr, (err, url) => {
         if (err) {
             console.error('Error generating QR code:', err);
-            return;
+        } else {
+            qrCodeUrl = url; 
+            console.log('QR Code generated');
         }
-        console.log('QR Code URL:', url);
     });
+
 });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -193,10 +211,7 @@ client.on('message_create', async (message) => {
 
 });
 
-
-
 client.initialize();
-
 
 
 const app = express();
@@ -204,6 +219,15 @@ const app = express();
 app.get('/', (_, res) => {
     res.json({ msg: 'Hello' })
 });
+
+app.get('/qr', (req, res) => {
+    if (qrCodeUrl) {
+        res.send(`<img src="${qrCodeUrl}" alt="QR Code">`);
+    } else {
+        res.send('QR code not generated yet. Please try again later.');
+    }
+});
+
 
 const PORT = process.env.PORT || 3000;
 
