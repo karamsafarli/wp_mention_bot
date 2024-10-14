@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const express = require('express');
 const { Client, LocalAuth, Poll } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -19,7 +19,7 @@ client.on('qr', (qr) => {
             console.error('Error generating QR code:', err);
             return;
         }
-        console.log('QR Code URL:', url); 
+        console.log('QR Code URL:', url);
     });
 });
 
@@ -196,3 +196,17 @@ client.on('message_create', async (message) => {
 
 
 client.initialize();
+
+
+
+const app = express();
+
+app.get('/', (_, res) => {
+    res.json({ msg: 'Hello' })
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)
+})
