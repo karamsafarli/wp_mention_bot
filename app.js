@@ -12,7 +12,15 @@ client.once('ready', () => {
 });
 
 client.on('qr', (qr) => {
-    qrcode.generate(qr, { small: true });
+    // qrcode.generate(qr, { small: true });
+
+    qrcode.toDataURL(qr, (err, url) => {
+        if (err) {
+            console.error('Error generating QR code:', err);
+            return;
+        }
+        console.log('QR Code URL:', url); 
+    });
 });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
