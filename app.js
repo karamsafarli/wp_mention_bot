@@ -16,6 +16,14 @@ client.once('ready', () => {
     console.log('Client is ready!');
 });
 
+client.on('disconnected', (reason) => {
+    console.error('Client was disconnected', reason);
+});
+
+client.on('auth_failure', (msg) => {
+    console.error('Authentication failure', msg);
+});
+
 // client.on('qr', (qr) => {
 //     // qrcode.generate(qr, { small: true });
 
