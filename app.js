@@ -3,7 +3,11 @@ const express = require('express');
 const { Client, LocalAuth, Poll } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const client = new Client();
+const client = new Client({
+    puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
+});
 // const client = new Client({
 //     authStrategy: new LocalAuth()
 // });
