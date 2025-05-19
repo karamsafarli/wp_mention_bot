@@ -1,0 +1,9 @@
+const ADNSU_KAKASH = '120363169661037364@g.us';
+const DEVERS = '120363297360858652@g.us';
+const EL_CLASSICO = '120363309896813487@g.us';
+
+module.exports = {
+    ADNSU_KAKASH,
+    DEVERS,
+    EL_CLASSICO
+}
